@@ -6,7 +6,9 @@ directory = input("Please enter the file directory: ")
 
 #Create empty excel workbook with 1 empty worksheet
 wb = openpyxl.Workbook('MaxValues.xlsx')
-ws = wb.create_sheet()
+ws = wb.create_sheet('Max Numbers')
+#ws['A1'] = "File Name"
+#ws['B1'] = 'Maximum Value'
 
 def clean_line(line):
     return int(line.strip(';\n'))
@@ -19,22 +21,23 @@ if os.path.lexists(directory):
     for path, dirs, files in os.walk(directory):
         #opens files one by one
         for blah in files:
-            #print("Opening:" + blah)
+
             filepath = os.path.join(directory, blah)
-            #print("Poopinggggg: " + filepath)
             f = open(filepath)
 
-            numbers = map(clean_line, f.readlines())
+            numbers = list(map(clean_line, f.readlines()))
 
+
+            if len(numbers) > 0:
+                print(max(numbers))
             #for line in f.readlines():
             #    strip_line = line.strip(';\n')
             #    numbers.append(int(strip_line))
-            print(max(numbers))
+            else:
 
-        #wb.save("MaxValues.xlsx")
-        #wb.close("MaxValues.xlsx")
+                print(filepath + "is empty.")
+
+        wb.save("MaxValues.xlsx")
+        wb.close("MaxValues.xlsx")
 else:
     print("That pathway,"+ directory + " is no good.")
-
-
-print(os.path.dirname(directory))
